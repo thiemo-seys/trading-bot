@@ -16,5 +16,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     # add arguments to parser
     parser.add_argument("-c", "--config", help="Config file location", default="default.yaml")
+    parser.add_argument("-lf", "--logging_file", help="location of the logging file", default="app.log")
     # execute main function declared above
     main()

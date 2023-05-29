@@ -7,6 +7,7 @@ from file_utils import load_yaml
 class Config:
     binance_api_key: str
     logging_level: str
+    logging_file: str
 
     @staticmethod
     def from_yaml(path: str):
