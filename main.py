@@ -3,7 +3,7 @@ import argparse
 from binance.client import Client
 
 from config import Config
-from exchanges.binance import BinanceAdapter
+from exchanges.binance_adapter import BinanceAdapter
 
 
 def main():
