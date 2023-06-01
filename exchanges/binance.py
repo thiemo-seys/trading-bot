@@ -12,8 +12,6 @@ class BinanceAdapter(ExchangeAdapter):
     def list_tickers(self) -> List[Dict]:
         return self.client.get_all_tickers()
 
-    # TODO: the two methods below might be a bit redundant, could probably be comined into a single function
-
     def get_tickers(self, symbols: List[str]) -> List[Dict]:
         """
         24 hour price change statistics
