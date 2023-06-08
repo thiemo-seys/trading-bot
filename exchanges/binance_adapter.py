@@ -4,7 +4,8 @@ from enum import Enum
 
 from binance.client import Client
 
-from exchanges.adapter import ExchangeAdapter
+from exchanges.binance_parser import data_to_candlestick
+from exchanges.candlestick import CandleStick
 
 
 class KlineInterval(Enum):
@@ -25,12 +26,7 @@ class KlineInterval(Enum):
     ONE_MONTH = Client.KLINE_INTERVAL_1MONTH
 
 
-# TODO: this feels a bit like a class that does 2 things
-# -> mapping methods to a general interface
-# -> transforming json data to a general Objects
-# maybe split this into 2 classes?
-# or add a class to the interface that transforms json data to objects
-class BinanceAdapter(ExchangeAdapter):
+class BinanceAdapter:
     def __init__(self, client: Client):
         self.client = client
 
@@ -39,7 +35,7 @@ class BinanceAdapter(ExchangeAdapter):
     def list_tickers(self) -> List[Dict]:
         ticker_data = self.client.get_all_tickers()
 
-        return []
+        return ticker_data
 
 
     # TODO: there should be a different endpoint: "" where we can provide our own date range
@@ -59,7 +55,7 @@ class BinanceAdapter(ExchangeAdapter):
         return []
 
 
-    def get_candle(self, symbol: str, interval: KlineInterval, start_date, end_date) -> List[Dict]:
+    def get_candle(self, symbol: str, interval: KlineInterval, start_date, end_date) -> List[CandleStick]:
         candle_data = self.client.get_historical_klines(symbol, interval.value, start_date, end_date)
 
-        return candle_data
+        return [data_to_candlestick(data) for data in candle_data]

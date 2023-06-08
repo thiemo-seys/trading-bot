@@ -1,9 +1,7 @@
 from dataclasses import dataclass
-# use decimals to represent currency values, floats lack presicion
-# TODO: set precision to something reasonable
-from decimal import Decimal, getcontext
 
-from exchanges.symbol import Symbol
+# TODO: use context to set the precision
+from decimal import Decimal
 
 
 @dataclass
@@ -19,5 +17,7 @@ class CandleStick:
     number_of_trades: int
     taker_buy_base_asset_volume: Decimal
     taker_buy_quote_asset_volume: Decimal
-
-    symbol: Symbol
+    # no clue what the meaning of ignore is
+    # docs state: // Unused field, ignore.
+    # but why???
+    ignore: float
