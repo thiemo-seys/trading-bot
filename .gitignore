@@ -186,3 +186,6 @@ fabric.properties
 
 # configs
 configs
+
+# debug scripts
+debug
