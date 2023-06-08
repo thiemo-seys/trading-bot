@@ -13,7 +13,7 @@ def test_binance_adapter(mocker):
 
     tickers_list = adapter.list_tickers()
     tickers = adapter.get_tickers(["mock_1", "mock_2"])
-    candles = adapter.get_candle("mock_1", KlineInterval.ONE_HOUR , "mock_3", "mock_4")
+    candles = adapter.get_candlesticks("mock_1", KlineInterval.ONE_HOUR , "mock_3", "mock_4")
 
     # list_tickers
     #assert tickers_list == []

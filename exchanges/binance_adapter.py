@@ -55,7 +55,7 @@ class BinanceAdapter:
         return []
 
 
-    def get_candle(self, symbol: str, interval: KlineInterval, start_date, end_date) -> List[CandleStick]:
+    def get_candlesticks(self, symbol: str, interval: KlineInterval, start_date, end_date) -> List[CandleStick]:
         candle_data = self.client.get_historical_klines(symbol, interval.value, start_date, end_date)
 
         return [data_to_candlestick(data) for data in candle_data]

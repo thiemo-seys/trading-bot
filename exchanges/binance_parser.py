@@ -14,7 +14,7 @@ def data_to_candlestick(data: dict) -> CandleStick:
         'number_of_trades': int(data[8]),
         'taker_buy_base_asset_volume': float(data[9]),
         'taker_buy_quote_asset_volume': float(data[10]),
-        'ignore': float(data[11])
+        'ignore': float(data[11]) # TODO: not sure if we want to store this
     }
 
     return CandleStick(**candlestick_attributes)
