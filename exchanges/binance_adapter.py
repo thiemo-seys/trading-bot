@@ -4,8 +4,10 @@ from enum import Enum
 
 from binance.client import Client
 
-from exchanges.binance_parser import data_to_candlestick
 from exchanges.candlestick import CandleStick
+from exchanges.symbol import Symbol
+
+from exchanges.binance_parser import data_to_candlestick
 
 
 class KlineInterval(Enum):
@@ -30,32 +32,13 @@ class BinanceAdapter:
     def __init__(self, client: Client):
         self.client = client
 
-    # TODO: consider using: get_exchange_info() to get all symbols
-    # it returns whether the currency is trading as well
-    def list_tickers(self) -> List[Dict]:
-        ticker_data = self.client.get_all_tickers()
 
-        return ticker_data
+    def get_symbols(self) -> List[Currency]:
+        currencies_data = self.client.get_exchange_info()
 
-
-    # TODO: there should be a different endpoint: "" where we can provide our own date range
-    # "GET /api/v3/ticker"
-    def get_tickers(self, symbols: List[str]) -> List[Dict]:
-        if not isinstance(symbols, list):
-            symbols = [symbols]
-
-        # super vague 'hack'
-        # request library does not correctly serialize lists (or binance API does not process spaces in a list correctly)
-        # so we just manually format the list into a string
-        symbols = json.dumps(symbols)
-        symbols = symbols.replace(" ", '')
-
-        tickers_data = self.client.get_ticker(symbols=symbols)
-
-        return []
-
+        return [data_to_symbol(data) for data in currencies_data]
 
     def get_candlesticks(self, symbol: str, interval: KlineInterval, start_date, end_date) -> List[CandleStick]:
         candle_data = self.client.get_historical_klines(symbol, interval.value, start_date, end_date)
 
-        return [data_to_candlestick(data) for data in candle_data]
+        return [data_to_candlestick(data.update(interval.value)) for data in candle_data]

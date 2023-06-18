@@ -17,7 +17,4 @@ class CandleStick:
     number_of_trades: int
     taker_buy_base_asset_volume: Decimal
     taker_buy_quote_asset_volume: Decimal
-    # no clue what the meaning of ignore is
-    # docs state: // Unused field, ignore.
-    # but why???
-    ignore: float
+    interval: str

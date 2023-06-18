@@ -5,21 +5,14 @@ from exchanges.binance_adapter import BinanceAdapter, KlineInterval
 def test_binance_adapter(mocker):
     mock_client = mocker.Mock()
 
-    mock_client.get_all_tickers.return_value = {}
-    mock_client.get_ticker.return_value = {}
+    mock_client.get_exchange_info.return_value = []
     mock_client.get_historical_klines.return_value = [[1686168000000, '26489.39000000', '26493.29000000', '25881.89000000', '26358.48000000', '195.66986500', 1686171599999, '5162839.96099763', 4890, '113.90574800', '3005012.12117593', '0']]
 
     adapter = BinanceAdapter(client=mock_client)
 
-    tickers_list = adapter.list_tickers()
-    tickers = adapter.get_tickers(["mock_1", "mock_2"])
+    symbols = adapter.get_symbols()
     candles = adapter.get_candlesticks("mock_1", KlineInterval.ONE_HOUR , "mock_3", "mock_4")
 
-    # list_tickers
-    #assert tickers_list == []
-
-    # tickers
-    #assert tickers == []
 
     # candles
     candle = candles[0]
