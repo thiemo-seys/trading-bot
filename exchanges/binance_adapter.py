@@ -1,5 +1,4 @@
-import json
-from typing import Dict, List
+from typing import List
 from enum import Enum
 
 from binance.client import Client
@@ -7,7 +6,7 @@ from binance.client import Client
 from exchanges.candlestick import CandleStick
 from exchanges.symbol import Symbol
 
-from exchanges.binance_parser import data_to_candlestick
+from exchanges.binance_parser import data_to_candlestick, data_to_symbol
 
 
 class KlineInterval(Enum):
@@ -32,8 +31,7 @@ class BinanceAdapter:
     def __init__(self, client: Client):
         self.client = client
 
-
-    def get_symbols(self) -> List[Currency]:
+    def get_symbols(self) -> List[Symbol]:
         currencies_data = self.client.get_exchange_info()
 
         return [data_to_symbol(data) for data in currencies_data]
@@ -41,4 +39,4 @@ class BinanceAdapter:
     def get_candlesticks(self, symbol: str, interval: KlineInterval, start_date, end_date) -> List[CandleStick]:
         candle_data = self.client.get_historical_klines(symbol, interval.value, start_date, end_date)
 
-        return [data_to_candlestick(data.update(interval.value)) for data in candle_data]
+        return [data_to_candlestick(data + [interval.value]) for data in candle_data]
