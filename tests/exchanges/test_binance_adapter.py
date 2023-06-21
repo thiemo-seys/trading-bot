@@ -31,4 +31,3 @@ def test_candles(mocker):
     assert candle.taker_buy_base_asset_volume == 113.90574800
     assert candle.taker_buy_quote_asset_volume == 3005012.12117593
     assert candle.interval == KlineInterval.ONE_HOUR.value
-
