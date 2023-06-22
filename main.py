@@ -15,7 +15,7 @@ def main():
     adapter = BinanceAdapter(client)
 
     # track prices of all cryptos, warn when price changes by more than 5% in X timeframe
-    
+
 
 
 if __name__ == "__main__":
