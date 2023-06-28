@@ -1,22 +1,34 @@
 import argparse
 
-from binance.client import Client
+from binance import ThreadedWebsocketManager
 
 from config import Config
-from exchanges.binance_adapter import BinanceAdapter
+from src.log_util import get_logger
+from src.binance_listener import WebSocketListener
+from src.message_handler import LogHandler
+from src.composite import CompositeListener
 
 
 def main():
     args = parser.parse_args()
 
     config = Config.from_yaml(args.config)
+    client = ThreadedWebsocketManager(config.api_key, config.api_secret, testnet=True)
 
-    client = Client(config.api_key, config.api_secret, testnet=True)
-    adapter = BinanceAdapter(client)
-    adapter.list_tickers()
+    logger = get_logger(__name__)
+    log_handler = LogHandler(logger)
+    handlers = [log_handler]
+
+    composite_handler = CompositeListener(handlers)
+
+    binance_listener = WebSocketListener(client, composite_handler)
+    binance_listener._start()
+    binance_listener.start_symbol('BNBBTC')
+
+
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-c', '--config', type=str, help='path to config file', default='configs/binance_testnet.yaml')
+    parser.add_argument('-c', '--config', type=str, help='path to config file', default='configs/testnet.yaml')
     main()
